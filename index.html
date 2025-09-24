@@ -46,11 +46,17 @@
             align-items: center;
             gap: 0.5rem;
         }
+        
+        .nav-menu-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
 
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 1rem;
         }
 
         .nav-link {
@@ -279,6 +285,34 @@
             color: #2563eb;
         }
 
+        /* About Section */
+        .about-section {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            color: #1e40af;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-section p {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #6b7280;
+            text-align: left;
+        }
+        
+        .about-section p ul li {
+            list-style: none;
+            padding-left: 1rem;
+            text-indent: -1rem;
+        }
+
+
         /* Dashboard & Profile Section */
         .dashboard, .profile-section {
             padding: 3rem 2rem;
@@ -306,6 +340,7 @@
             padding: 2rem;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
         .dashboard-card:hover {
@@ -553,6 +588,20 @@
             border-color: #3b82f6;
             transform: translateX(5px);
         }
+        
+        .recommendation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .recommendation-meta .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
 
         /* Chatbot */
         .chatbot-button {
@@ -731,9 +780,29 @@
                 padding: 1rem;
                 display: none;
             }
+            
+            .nav-menu-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0;
+            }
+            
+            .nav-menu-wrapper .user-info {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .nav-menu-wrapper .user-info button {
+                width: 100%;
+            }
 
             .nav-menu.active {
                 display: flex;
+            }
+            
+            .auth-buttons {
+                width: 100%;
             }
 
             .mobile-menu {
@@ -798,6 +867,13 @@
                 width: 100%;
             }
         }
+
+        .dashboard-card .details {
+            border-top: 1px solid #e5e7eb;
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+        
     </style>
 </head>
 <body>
@@ -809,19 +885,23 @@
             <div class="logo">
                 📚 Smart Student Hub
             </div>
-            <ul class="nav-menu">
-                <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
-                <li><a href="#" class="nav-link" data-section="dashboard">Dashboard</a></li>
-                <li><a href="#" class="nav-link" data-section="activities">Activities</a></li>
-                <li id="recommendations-nav-link"><a href="#" class="nav-link" data-section="recommendations">Recommendations</a></li>
-            </ul>
-            <div class="auth-buttons" id="authButtons">
-                <button class="btn-auth" onclick="openModal('login')">Login</button>
-            </div>
-            <div class="user-info hidden" id="userInfo">
-                <span class="live-indicator"></span>
-                <span id="userWelcome"></span>
-                <button class="btn-auth" onclick="logout()">Logout</button>
+            <div class="nav-menu-wrapper">
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
+                    <li id="dashboard-nav-link" class="hidden-after-logout"><a href="#" class="nav-link" data-section="dashboard">Dashboard</a></li>
+                    <li id="activity-nav-link" class="hidden-after-logout"><a href="#" class="nav-link" data-section="activities">Activities</a></li>
+                    <li id="recommendations-nav-link" class="hidden"><a href="#" class="nav-link" data-section="recommendations">Recommendations</a></li>
+                    <li id="student-reg-nav-link" class="hidden"><a href="#" class="nav-link" data-section="student-registration">New Student</a></li>
+                    <li id="student-search-nav-link" class="hidden"><a href="#" class="nav-link" data-section="student-search">Student Search</a></li>
+                </ul>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn-auth" onclick="openModal('login')">Login</button>
+                </div>
+                <div class="user-info hidden" id="userInfo">
+                    <span class="live-indicator"></span>
+                    <span id="userWelcome"></span>
+                    <button class="btn-auth" onclick="logout()">Logout</button>
+                </div>
             </div>
             <button class="mobile-menu">☰</button>
         </div>
@@ -834,6 +914,10 @@
             </div>
 
             <div class="user-type-selector" id="userTypeSelector">
+                <div class="user-type" data-type="admin">
+                    <div style="font-size: 2rem;">🏢</div>
+                    <div>College Admin</div>
+                </div>
                 <div class="user-type selected" data-type="student">
                     <div style="font-size: 2rem;">👨‍🎓</div>
                     <div>Student</div>
@@ -871,6 +955,12 @@
                         <button class="btn btn-secondary">Learn More</button>
                     </div>
                 </div>
+            </div>
+            <div id="about-section" class="about-section">
+                <h2>About Us</h2>
+                <p>
+                    Smart Student Hub is a centralized digital platform designed to capture and showcase the complete journey of students in higher education. It brings together academic achievements, extracurricular activities, certifications, internships, and community contributions into one verified profile, ensuring nothing is scattered or lost. The platform empowers students with a dynamic digital portfolio that supports career planning, placements, and higher studies applications, while also enabling faculty to mentor effectively through real-time data. At the institutional level, it simplifies reporting and reduces administrative burden during audits and accreditations. With features like faculty approval systems, AI-powered recommendations for internships and scholarships, and an integrated chatbot for career guidance, Smart Student Hub modernizes student activity management and aligns with the digital transformation goals of higher education institutions.
+                </p>
             </div>
             <div id="profile-content" class="profile-section hidden"></div>
         </section>
@@ -943,6 +1033,10 @@
                     </h3>
                     <div id="pendingApprovalsList">
                         </div>
+                    <div id="approvedRejectedList" style="margin-top: 2rem;">
+                         <h4 style="margin-bottom: 1rem;">Approved/Rejected Activities</h4>
+                         <div id="approvedRejectedItems"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -985,6 +1079,73 @@
                 </div>
             </div>
         </section>
+
+        <section id="student-registration" class="section">
+            <div class="dashboard">
+                <h2 style="color: #1e40af; margin-bottom: 2rem; text-align: center;">New Student Registration</h2>
+                <div class="activity-form">
+                    <form id="studentRegistrationForm">
+                         <div class="form-group">
+                            <label>Student ID</label>
+                            <input type="text" id="regStudentId" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="regStudentName" required>
+                        </div>
+                         <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="regStudentEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Branch</label>
+                             <input type="text" id="regStudentBranch" disabled>
+                        </div>
+                         <div class="form-group">
+                            <label>Year</label>
+                            <input type="text" id="regStudentYear" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CGPA</label>
+                            <input type="number" step="0.1" id="regStudentCgpa" required>
+                        </div>
+                         <div class="form-group">
+                            <label>Attendance (%)</label>
+                            <input type="number" step="1" id="regStudentAttendance" required>
+                        </div>
+                         <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="regStudentPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Register Student</button>
+                    </form>
+                </div>
+                 <div class="list-container" id="registeredStudentsList">
+                    <h3 style="color: #1e40af;">Students Registered by You (<span id="registeredStudentCount">0</span>)</h3>
+                    <div class="list-group" id="registeredStudents"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="student-search" class="section">
+            <div class="dashboard">
+                <h2 style="color: #1e40af; margin-bottom: 2rem; text-align: center;">Student Profile Search</h2>
+                 <div class="activity-form">
+                    <div class="form-group">
+                        <label>Search by Student ID or Name</label>
+                        <input type="text" id="studentSearchInput" placeholder="e.g., VH13000 or Shyam Sundar">
+                    </div>
+                    <button class="btn btn-primary" onclick="searchStudent()">Search</button>
+                </div>
+                <div class="list-container" id="studentSearchResult">
+                    <h3 style="color: #1e40af;">Search Results</h3>
+                    <div class="list-group" id="studentSearchItems">
+                        <p>Search for a student to see their profile.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <button class="chatbot-button" onclick="toggleChat()">💬</button>
@@ -1003,14 +1164,21 @@
             <button onclick="sendMessage()">📤</button>
         </div>
     </div>
+     <div id="studentProfileModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div id="studentProfileDetails"></div>
+            <button onclick="closeStudentProfileModal()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+        </div>
+    </div>
+
 
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Contact Info</h3>
-                <p>📧 info@smartstudenthub.edu</p>
+                <p>📧 smartstudenthub@ssh.com</p>
                 <p>📞 +91 9876543210</p>
-                <p>📍 Delhi, India</p>
+                <p>📍 India</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
@@ -1033,7 +1201,7 @@
             <a href="#" class="social-icon">💼</a>
             <a href="#" class="social-icon">📷</a>
         </div>
-        <p>&copy; 2025 Smart Student Hub. All rights reserved. | SIH Hackathon Project</p>
+        <p>&copy; 2025 Smart Student Hub. All rights reserved. | SIH Hackathon Project | Developed by Unstoppable Team</p>
     </footer>
 
     <script>
@@ -1043,36 +1211,90 @@
         let activities = [];
         let facultyList = [];
         let wsConnection = null;
-        const GEMINI_API_KEY = "AIzaSyCYLr5JOxS9dQ0R2eL9k0AhcQXYecbTWdw";
+        const GEMINI_API_KEY = "AIzaSyDc13P4s-5kzVQ-Y-ooluzci9PAdAZkV7M";
         const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
 
         // Mock Database
         let mockUsers = {
             students: [],
-            faculty: []
+            faculty: [],
+            admins: [
+                {id: 'VH001', password: 'pass123', name: 'College Admin', college: 'Vel Tech High Tech'}
+            ]
         };
-        const departments = ['Computer Science', 'Electronics', 'Mechanical', 'Civil', 'Chemical'];
+        const departments = ['Artificial Intelligence & Data Science','Computer Science', 'Electronics', 'Mechanical', 'Civil', 'Chemical'];
+        const registeredStudents = {};
 
         const mockActivities = [
             {
-                id: 'ACT001', studentId: 'STU001', type: 'certification', name: 'Google Cloud Certification',
-                description: 'Completed Google Cloud Professional certification', facultyId: 'FAC001',
-                status: 'pending', submittedAt: new Date('2025-01-15'), file: 'certificate.pdf'
+                id: 'ACT001', studentId: 'VH13005', type: 'certification', name: 'Google Cloud Certification',
+                description: 'Completed Google Cloud Professional certification', facultyId: 'F002',
+                status: 'pending', submittedAt: new Date('2025-09-15'), file: 'certificate.pdf'
             },
             {
-                id: 'ACT002', studentId: 'STU001', type: 'workshop', name: 'React.js Workshop',
-                description: 'Attended 3-day React.js workshop', facultyId: 'FAC001',
-                status: 'approved', submittedAt: new Date('2025-01-10'), approvedAt: new Date('2025-01-12'), file: 'workshop-certificate.pdf'
+                id: 'ACT002', studentId: 'VH13005', type: 'workshop', name: 'React.js Workshop',
+                description: 'Attended 3-day React.js workshop', facultyId: 'F002',
+                status: 'approved', submittedAt: new Date('2025-09-10'), approvedAt: new Date('2025-09-12'), file: 'workshop-certificate.pdf'
             },
             {
-                id: 'ACT003', studentId: 'STU003', type: 'competition', name: 'National Robotics Olympiad',
-                description: 'Participated in the national robotics competition', facultyId: 'FAC002',
+                id: 'ACT003', studentId: 'VH13000', type: 'competition', name: 'National Robotics Olympiad',
+                description: 'Participated in the national robotics competition', facultyId: 'F001',
                 status: 'pending', submittedAt: new Date('2025-09-20'), file: 'olympiad-certificate.pdf'
             },
             {
-                id: 'ACT004', studentId: 'STU004', type: 'research', name: 'AI in Healthcare Research Paper',
-                description: 'Co-authored a research paper on AI in diagnostics.', facultyId: 'FAC001',
+                id: 'ACT004', studentId: 'VH13000', type: 'research', name: 'AI in Healthcare Research Paper',
+                description: 'Co-authored a research paper on AI in diagnostics.', facultyId: 'F001',
                 status: 'approved', submittedAt: new Date('2025-08-01'), approvedAt: new Date('2025-08-05'), file: 'research-paper.pdf'
+            },
+          {
+                id: 'ACT005', studentId: 'VH12909', type: 'certification', name: 'Google Cloud Certification',
+                description: 'Completed Google Cloud Professional certification', facultyId: 'F003',
+                status: 'pending', submittedAt: new Date('2025-09-15'), file: 'certificate.pdf'
+            },
+            {
+                id: 'ACT006', studentId: 'VH12909', type: 'workshop', name: 'React.js Workshop',
+                description: 'Attended 3-day React.js workshop', facultyId: 'F003',
+                status: 'approved', submittedAt: new Date('2025-09-10'), approvedAt: new Date('2025-09-12'), file: 'workshop-certificate.pdf'
+            },
+            {
+                id: 'ACT007', studentId: 'VH13018', type: 'competition', name: 'National Robotics Olympiad',
+                description: 'Participated in the national robotics competition', facultyId: 'F002',
+                status: 'pending', submittedAt: new Date('2025-09-20'), file: 'olympiad-certificate.pdf'
+            },
+            {
+                id: 'ACT008', studentId: 'VH13018', type: 'research', name: 'AI in Healthcare Research Paper',
+                description: 'Co-authored a research paper on AI in diagnostics.', facultyId: 'F002',
+                status: 'approved', submittedAt: new Date('2025-08-01'), approvedAt: new Date('2025-08-05'), file: 'research-paper.pdf'
+            },
+          {
+                id: 'ACT009', studentId: 'VH13001', type: 'competition', name: 'National Robotics Olympiad',
+                description: 'Participated in the national robotics competition', facultyId: 'F003',
+                status: 'pending', submittedAt: new Date('2025-09-20'), file: 'olympiad-certificate.pdf'
+            },
+            {
+                id: 'ACT0010', studentId: 'VH13001', type: 'research', name: 'AI in Healthcare Research Paper',
+                description: 'Co-authored a research paper on AI in diagnostics.', facultyId: 'F003',
+                status: 'approved', submittedAt: new Date('2025-08-01'), approvedAt: new Date('2025-08-05'), file: 'research-paper.pdf'
+            },
+          {
+                id: 'ACT011', studentId: 'VH12998', type: 'competition', name: 'National Robotics Olympiad',
+                description: 'Participated in the national robotics competition', facultyId: 'F001',
+                status: 'pending', submittedAt: new Date('2025-09-20'), file: 'olympiad-certificate.pdf'
+            },
+            {
+                id: 'ACT012', studentId: 'VH12998', type: 'research', name: 'AI in Healthcare Research Paper',
+                description: 'Co-authored a research paper on AI in diagnostics.', facultyId: 'F001',
+                status: 'approved', submittedAt: new Date('2025-08-01'), approvedAt: new Date('2025-08-05'), file: 'research-paper.pdf'
+            },
+            {
+                id: 'ACT013', studentId: 'VH13005', type: 'internship', name: 'Summer Internship at Google',
+                description: 'Completed a 10-week summer internship in software development.', facultyId: 'F002',
+                status: 'approved', submittedAt: new Date('2025-07-01'), approvedAt: new Date('2025-07-05'), file: 'internship-certificate.pdf'
+            },
+            {
+                id: 'ACT014', studentId: 'VH13005', type: 'internship', name: 'AI Intern at IBM',
+                description: '6-week internship in AI development.', facultyId: 'F002',
+                status: 'rejected', submittedAt: new Date('2025-06-20'), rejectedAt: new Date('2025-06-25'), file: 'internship-proposal.pdf'
             }
         ];
 
@@ -1087,16 +1309,19 @@
         function loadMockData() {
             // Mock Admin Panel creating faculty accounts
             mockUsers.faculty = [
-                { id: 'FAC001', name: 'Dr. Priya Sharma', email: 'priya.sharma@faculty.edu', password: 'faculty123', department: 'Computer Science', designation: 'Professor' },
-                { id: 'FAC002', name: 'Dr. Amit Kumar', email: 'amit.kumar@faculty.edu', password: 'faculty123', department: 'Electronics', designation: 'Associate Professor' }
+                { id: 'F001', name: 'Dr. M. Balaji', email: 'balaji.m@velhightech.com', password: 'pass123', department: 'Artificial Intelligence & Data Science', designation: 'Professor' },
+                { id: 'F002', name: 'Dr. B. Tamilselvi', email: 'tamilselvi.b@velhightech.com', password: 'pass123', department: 'Artificial Intelligence & Data Science', designation: 'Professor' },
+              { id: 'F003', name: 'Dr. Priya', email: 'priya.rv@velhightech.com', password: 'pass123', department: 'Artificial Intelligence & Data Science', designation: 'Professor' }
             ];
 
             // Mock Faculty creating student accounts
             mockUsers.students = [
-                { id: 'STU001', name: 'John Doe', email: 'john.doe@student.edu', password: 'password123', branch: 'Computer Science', year: '3rd Year', cgpa: 8.5, attendance: 92, skills: ['Python', 'Java', 'Web Development'], interests: ['AI/ML', 'Software Development'] },
-                { id: 'STU003', name: 'Peter Jones', email: 'peter.jones@student.edu', password: 'password123', branch: 'Computer Science', year: '3rd Year', cgpa: 7.8, attendance: 85, skills: ['C++', 'Algorithms'], interests: ['Competitive Programming'] },
-                { id: 'STU004', name: 'Sarah Lee', email: 'sarah.lee@student.edu', password: 'password123', branch: 'Computer Science', year: '4th Year', cgpa: 9.1, attendance: 95, skills: ['ML', 'Data Science'], interests: ['Research', 'AI'] },
-                { id: 'STU002', name: 'Jane Smith', email: 'jane.smith@student.edu', password: 'password123', branch: 'Electronics', year: '2nd Year', cgpa: 9.2, attendance: 95, skills: ['Circuit Design', 'IoT'], interests: ['Robotics', 'Embedded Systems'] }
+                { id: 'VH13000', name: 'Shyam Sundar R', email: 'vh13000_ai23@velhightech.com', password: 'pass123', branch: 'Artificial Intelligence & Data Science', year: '3rd Year', cgpa: 8.8, attendance: 92, skills: ['Python', 'Java', 'Web Development'], interests: ['AI/ML', 'Software Development'], registeredByFacultyId: 'F001' },
+                { id: 'VH12909', name: 'Ashtami R S', email: 'vh12909_ai23@velhightech.com', password: 'pass123', branch: 'Artificial Intelligence & Data Science', year: '3rd Year', cgpa: 8.8, attendance: 92, skills: ['C++', 'Algorithms'], interests: ['Competitive Programming'], registeredByFacultyId: 'F003' },
+               { id: 'VH12998', name: 'Shree Hari S L', email: 'vh12998_ai23@velhightech.com', password: 'pass123', branch: 'Artificial Intelligence & Data Science', year: '3rd Year', cgpa: 8.0, attendance: 90, skills: ['Python', 'Java', 'Web Development'], interests: ['AI/ML', 'Software Development'], registeredByFacultyId: 'F001' },
+                { id: 'VH13018', name: 'Yasvanthini T', email: 'vh13018_ai23@velhightech.com', password: 'pass123', branch: 'Artificial Intelligence & Data Science', year: '3rd Year', cgpa: 8.2, attendance: 93, skills: ['C++', 'Algorithms'], interests: ['Competitive Programming'], registeredByFacultyId: 'F002' },
+              { id: 'VH13001', name: 'Sowmiya S', email: 'vh13001_ai23@velhightech.com', password: 'pass123', branch: 'Artificial Intelligence & Data Science', year: '3rd Year', cgpa: 8.2, attendance: 91, skills: ['Python', 'Java', 'Web Development'], interests: ['AI/ML', 'Software Development'], registeredByFacultyId: 'F003' },
+                { id: 'VH13005', name: 'Thamizharasan K', email: 'vh3005_ai23@velhightech.com', password: 'pass123', branch: 'Artificial Intelligence & Data Science', year: '3rd Year', cgpa: 7.5, attendance: 85, skills: ['JAVA','GitHub', 'Algorithms'], interests: ['Competitive Programming','System Design'], registeredByFacultyId: 'F002' }
             ];
 
             facultyList = mockUsers.faculty;
@@ -1124,7 +1349,7 @@
             });
 
             document.querySelector('.mobile-menu').addEventListener('click', () => {
-                document.querySelector('.nav-menu').classList.toggle('active');
+                document.querySelector('.nav-menu-wrapper').classList.toggle('active');
             });
 
             document.querySelectorAll('.user-type').forEach(type => {
@@ -1143,13 +1368,39 @@
             document.body.addEventListener('click', (e) => {
                 if (e.target.id === 'generatePortfolioBtn') {
                     generatePortfolio();
+                } else if (e.target.classList.contains('view-profile-btn')) {
+                    const studentId = e.target.dataset.studentId;
+                    showStudentProfile(studentId);
                 }
             });
+
+            document.getElementById('studentRegistrationForm').addEventListener('submit', handleStudentRegistration);
+            document.getElementById('studentSearchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchStudent();
+                }
+            });
+            
+            if(document.getElementById('regStudentBranch')) {
+                document.getElementById('regStudentBranch').value = 'Artificial Intelligence & Data Science';
+            }
         }
 
         function showInitialHomePage() {
             document.getElementById('hero-section').classList.remove('hidden');
+            document.getElementById('about-section').classList.remove('hidden');
             document.getElementById('profile-content').classList.add('hidden');
+            document.getElementById('student-reg-nav-link').classList.add('hidden');
+            document.getElementById('student-search-nav-link').classList.add('hidden');
+            document.getElementById('recommendations-nav-link').classList.add('hidden');
+            document.getElementById('dashboard-nav-link').classList.add('hidden');
+            document.getElementById('activity-nav-link').classList.add('hidden');
+            
+            document.getElementById('authButtons').classList.remove('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector('[data-section="home"]').classList.add('active');
         }
 
         // Authentication Functions
@@ -1173,9 +1424,13 @@
                 user = mockUsers.students.find(s => 
                     (s.email === loginId || s.id === loginId) && s.password === password
                 );
-            } else {
+            } else if (selectedUserType === 'faculty') {
                 user = mockUsers.faculty.find(f => 
                     (f.email === loginId || f.id === loginId) && f.password === password
+                );
+            } else if (selectedUserType === 'admin') {
+                 user = mockUsers.admins.find(a => 
+                    (a.email === loginId || a.id === loginId) && a.password === password
                 );
             }
             
@@ -1204,10 +1459,7 @@
             document.getElementById('userInfo').classList.add('hidden');
             
             showInitialHomePage();
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            document.querySelector('[data-section="home"]').classList.add('active');
-            document.getElementById('recommendations-nav-link').classList.remove('hidden');
-
+            
             showNotification('Logged out successfully!', 'success');
         }
 
@@ -1215,12 +1467,27 @@
             document.getElementById('authButtons').classList.add('hidden');
             document.getElementById('userInfo').classList.remove('hidden');
             document.getElementById('userWelcome').textContent = `Welcome, ${currentUser.name}`;
+            
+            document.getElementById('hero-section').classList.add('hidden');
+            document.getElementById('about-section').classList.add('hidden');
+            document.getElementById('profile-content').classList.remove('hidden');
 
+            document.getElementById('dashboard-nav-link').classList.remove('hidden');
+            document.getElementById('activity-nav-link').classList.remove('hidden');
+            document.getElementById('student-reg-nav-link').classList.add('hidden');
+            document.getElementById('student-search-nav-link').classList.add('hidden');
+            document.getElementById('recommendations-nav-link').classList.add('hidden');
+            
             if (userType === 'faculty') {
-                document.getElementById('recommendations-nav-link').classList.add('hidden');
-            } else {
+                document.getElementById('student-reg-nav-link').classList.remove('hidden');
+            } else if (userType === 'student') {
+                document.getElementById('student-search-nav-link').classList.remove('hidden');
                 document.getElementById('recommendations-nav-link').classList.remove('hidden');
                 loadRecommendations();
+            } else if (userType === 'admin') {
+                document.getElementById('dashboard-nav-link').classList.add('hidden');
+                document.getElementById('activity-nav-link').classList.add('hidden');
+                // Admin dashboard logic here
             }
 
             loadProfile();
@@ -1242,14 +1509,23 @@
             document.getElementById(sectionName).classList.add('active');
             const activeLink = document.querySelector(`[data-section="${sectionName}"]`);
             if (activeLink) activeLink.classList.add('active');
+
+            if (sectionName === 'student-registration') {
+                 if(currentUser && userType === 'faculty') {
+                    document.getElementById('regStudentBranch').value = currentUser.department;
+                    showRegisteredStudents();
+                }
+            }
         }
         
         // Profile & Dashboard Functions
         function loadProfile() {
             const heroSection = document.getElementById('hero-section');
+            const aboutSection = document.getElementById('about-section');
             const profileContent = document.getElementById('profile-content');
             
             heroSection.classList.add('hidden');
+            aboutSection.classList.add('hidden');
             profileContent.classList.remove('hidden');
 
             if (userType === 'student') {
@@ -1277,7 +1553,7 @@
                         </div>
                     </div>
                 `;
-            } else { // Faculty
+            } else if (userType === 'faculty'){ // Faculty
                 const totalStudents = mockUsers.students.filter(s => s.branch === currentUser.department).length;
                 const totalApproved = activities.filter(a => a.facultyId === currentUser.id && a.status === 'approved').length;
                 
@@ -1297,6 +1573,20 @@
                         </div>
                     </div>
                 `;
+            } else if (userType === 'admin') {
+                profileContent.innerHTML = `
+                    <div class="profile-card">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div class="profile-avatar">🏢</div>
+                            <h3>${currentUser.name}</h3>
+                            <p style="color: #6b7280;">College Admin</p>
+                        </div>
+                        <div style="display: grid; gap: 1rem;">
+                            <div><strong>Admin ID:</strong> ${currentUser.id}</div>
+                            <div><strong>College:</strong> ${currentUser.college}</div>
+                        </div>
+                    </div>
+                `;
             }
         }
 
@@ -1307,12 +1597,63 @@
             if (userType === 'faculty') {
                 dashboardTitle.textContent = 'Faculty Dashboard';
                 loadFacultyDashboard();
-            } else {
+            } else if (userType === 'student') {
                 dashboardTitle.textContent = 'Student Dashboard';
                 loadStudentDashboard();
+            } else if (userType === 'admin') {
+                 dashboardTitle.textContent = 'College Admin Dashboard';
+                 loadAdminDashboard();
             }
         }
         
+        function loadAdminDashboard() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            
+            const facultyCount = mockUsers.faculty.length;
+            const studentCount = mockUsers.students.length;
+            
+            let departmentsHTML = '';
+            departments.forEach(dept => {
+                const studentsInDept = mockUsers.students.filter(s => s.branch === dept).length;
+                const facultyInDept = mockUsers.faculty.filter(f => f.department === dept).length;
+                if (studentsInDept > 0 || facultyInDept > 0) {
+                     departmentsHTML += `
+                         <div class="list-item">
+                            <strong>${dept}</strong>
+                            <br><small>Students: ${studentsInDept}, Faculty: ${facultyInDept}</small>
+                         </div>
+                     `;
+                }
+            });
+
+            dashboardContent.innerHTML = `
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">👨‍🏫</div>
+                            <div class="card-title">Total Faculty</div>
+                        </div>
+                        <div class="card-value">${facultyCount}</div>
+                        <div class="card-description">Total faculty members in the college.</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon">👨‍🎓</div>
+                            <div class="card-title">Total Students</div>
+                        </div>
+                        <div class="card-value">${studentCount}</div>
+                        <div class="card-description">Total students enrolled in the college.</div>
+                    </div>
+                </div>
+                 <div class="list-container">
+                    <h3>College Overview by Department</h3>
+                    <div class="list-group">
+                        ${departmentsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
         function loadStudentDashboard() {
             const dashboardContent = document.getElementById('dashboardContent');
             const studentActivities = activities.filter(a => a.studentId === currentUser.id);
@@ -1327,33 +1668,87 @@
                 </div>
             `).join('');
             
+            const internshipsCount = approvedActivities.filter(a => a.type === 'internship').length;
+            const workshopsCount = approvedActivities.filter(a => a.type === 'workshop').length;
+            const competitionsCount = approvedActivities.filter(a => a.type === 'competition').length;
+            const certificationsCount = approvedActivities.filter(a => a.type === 'certification').length;
+            
+            const totalWorkingDays = 365;
+            const leaveDays = Math.round(totalWorkingDays * (1 - (currentUser.attendance || 0) / 100));
+
             const dashboardHTML = `
                 <div class="dashboard-grid">
-                    <div class="dashboard-card">
+                    <div class="dashboard-card" onclick="showDashboardDetails('academic')">
                         <div class="card-header">
                             <div class="card-icon">📊</div>
                             <div class="card-title">Academic Performance</div>
                         </div>
                         <div class="card-value">${currentUser.cgpa || 'N/A'}</div>
                         <div class="card-description">Current CGPA</div>
+                        <div class="details hidden" id="details-academic">
+                            <p><strong>Branch:</strong> ${currentUser.branch}</p>
+                            <p><strong>Year:</strong> ${currentUser.year}</p>
+                        </div>
                     </div>
 
-                    <div class="dashboard-card">
+                    <div class="dashboard-card" onclick="showDashboardDetails('attendance')">
                         <div class="card-header">
                             <div class="card-icon">✅</div>
                             <div class="card-title">Attendance</div>
                         </div>
                         <div class="card-value">${currentUser.attendance || 0}%</div>
                         <div class="card-description">Overall attendance rate</div>
+                        <div class="details hidden" id="details-attendance">
+                            <p><strong>Total Leave Days:</strong> ${leaveDays} days</p>
+                        </div>
                     </div>
                     
-                    <div class="dashboard-card">
+                    <div class="dashboard-card" onclick="showDashboardDetails('internships')">
+                        <div class="card-header">
+                            <div class="card-icon">💼</div>
+                            <div class="card-title">Internships</div>
+                        </div>
+                        <div class="card-value">${internshipsCount}</div>
+                        <div class="card-description">Completed internships</div>
+                        <div class="details hidden" id="details-internships">
+                             ${approvedActivities.filter(a => a.type === 'internship').map(a => `<p>• ${a.name}</p>`).join('') || '<p>No internships to display.</p>'}
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card" onclick="showDashboardDetails('workshops')">
+                        <div class="card-header">
+                            <div class="card-icon">🛠️</div>
+                            <div class="card-title">Workshops</div>
+                        </div>
+                        <div class="card-value">${workshopsCount}</div>
+                        <div class="card-description">Attended workshops</div>
+                        <div class="details hidden" id="details-workshops">
+                             ${approvedActivities.filter(a => a.type === 'workshop').map(a => `<p>• ${a.name}</p>`).join('') || '<p>No workshops to display.</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showDashboardDetails('competitions')">
                         <div class="card-header">
                             <div class="card-icon">🏆</div>
-                            <div class="card-title">Approved Activities</div>
+                            <div class="card-title">Competitions</div>
                         </div>
-                        <div class="card-value">${approvedActivities.length}</div>
-                        <div class="card-description">Total approved activities</div>
+                        <div class="card-value">${competitionsCount}</div>
+                        <div class="card-description">Competitions Participated</div>
+                        <div class="details hidden" id="details-competitions">
+                            ${approvedActivities.filter(a => a.type === 'competition').map(a => `<p>• ${a.name}</p>`).join('') || '<p>No competitions to display.</p>'}
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card" onclick="showDashboardDetails('certifications')">
+                        <div class="card-header">
+                            <div class="card-icon">🎓</div>
+                            <div class="card-title">Certifications</div>
+                        </div>
+                        <div class="card-value">${certificationsCount}</div>
+                        <div class="card-description">Earned Certifications</div>
+                        <div class="details hidden" id="details-certifications">
+                            ${approvedActivities.filter(a => a.type === 'certification').map(a => `<p>• ${a.name}</p>`).join('') || '<p>No certifications to display.</p>'}
+                        </div>
                     </div>
                 </div>
                 
@@ -1368,16 +1763,27 @@
             dashboardContent.innerHTML = dashboardHTML;
         }
         
+        function showDashboardDetails(type) {
+            const detailsElement = document.getElementById(`details-${type}`);
+            if (detailsElement) {
+                detailsElement.classList.toggle('hidden');
+            }
+        }
+        
         function loadFacultyDashboard() {
             const dashboardContent = document.getElementById('dashboardContent');
             const pendingApprovalsCount = activities.filter(a => a.facultyId === currentUser.id && a.status === 'pending').length;
             const totalApproved = activities.filter(a => a.facultyId === currentUser.id && a.status === 'approved').length;
             const myDepartmentStudents = mockUsers.students.filter(s => s.branch === currentUser.department);
+            const studentsRegisteredByFaculty = mockUsers.students.filter(s => s.registeredByFacultyId === currentUser.id);
 
             const studentListHTML = myDepartmentStudents.map(student => `
-                <div class="list-item">
-                    <strong>${student.name}</strong> (${student.id})
-                    <br><small>Year: ${student.year}, CGPA: ${student.cgpa || 'N/A'}</small>
+                <div class="list-item" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${student.name}</strong> (${student.id})
+                        <br><small>Year: ${student.year}, CGPA: ${student.cgpa || 'N/A'}</small>
+                    </div>
+                    <button class="btn btn-secondary btn-small view-profile-btn" data-student-id="${student.id}">View Profile</button>
                 </div>
             `).join('');
             
@@ -1404,10 +1810,10 @@
                     <div class="dashboard-card">
                         <div class="card-header">
                             <div class="card-icon">👥</div>
-                            <div class="card-title">Students in Department</div>
+                            <div class="card-title">Students Registered</div>
                         </div>
-                        <div class="card-value">${myDepartmentStudents.length}</div>
-                        <div class="card-description">Total students in your department</div>
+                        <div class="card-value">${studentsRegisteredByFaculty.length}</div>
+                        <div class="card-description">Students registered by you</div>
                     </div>
                 </div>
                 
@@ -1420,6 +1826,42 @@
             `;
             
             dashboardContent.innerHTML = dashboardHTML;
+        }
+        
+        function showStudentProfile(studentId) {
+            const student = mockUsers.students.find(s => s.id === studentId);
+            if (!student) {
+                showNotification('Student not found.', 'error');
+                return;
+            }
+            
+            const approvedActivities = activities.filter(a => a.studentId === student.id && a.status === 'approved');
+            
+            const profileHTML = `
+                <div class="profile-card">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="profile-avatar">👨‍🎓</div>
+                        <h3>${student.name}</h3>
+                        <p style="color: #6b7280;">Student</p>
+                    </div>
+                    <div style="display: grid; gap: 1rem;">
+                        <div><strong>Student ID:</strong> ${student.id}</div>
+                        <div><strong>Email:</strong> ${student.email}</div>
+                        <div><strong>Branch:</strong> ${student.branch || 'N/A'}</div>
+                        <div><strong>Year:</strong> ${student.year || 'N/A'}</div>
+                        <div><strong>CGPA:</strong> ${student.cgpa || 'N/A'}</div>
+                        <div><strong>Skills:</strong> ${student.skills ? student.skills.join(', ') : 'N/A'}</div>
+                        <div><strong>Interests:</strong> ${student.interests ? student.interests.join(', ') : 'N/A'}</div>
+                        <div><strong>Approved Activities:</strong> ${approvedActivities.length}</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('studentProfileDetails').innerHTML = profileHTML;
+            document.getElementById('studentProfileModal').style.display = 'flex';
+        }
+        
+        function closeStudentProfileModal() {
+            document.getElementById('studentProfileModal').style.display = 'none';
         }
 
         function generatePortfolio() {
@@ -1458,11 +1900,42 @@
                 loadStudentActivities();
                 document.getElementById('studentActivityForm').classList.remove('hidden');
                 document.getElementById('facultyApprovalPanel').classList.add('hidden');
+                document.getElementById('approvedRejectedList').classList.add('hidden');
             } else {
                 loadFacultyApprovals();
                 document.getElementById('studentActivityForm').classList.add('hidden');
                 document.getElementById('facultyApprovalPanel').classList.remove('hidden');
+                document.getElementById('approvedRejectedList').classList.remove('hidden');
+                loadFacultyApprovedRejectedActivities();
             }
+        }
+        
+        function loadFacultyApprovedRejectedActivities() {
+            const approvedRejectedList = document.getElementById('approvedRejectedItems');
+            const facultyActivities = activities.filter(a => a.facultyId === currentUser.id && (a.status === 'approved' || a.status === 'rejected'));
+            
+            if (facultyActivities.length === 0) {
+                approvedRejectedList.innerHTML = '<p>No approved or rejected activities yet.</p>';
+                return;
+            }
+
+            const itemsHTML = facultyActivities.map(activity => {
+                const student = mockUsers.students.find(s => s.id === activity.studentId);
+                const statusClass = activity.status === 'approved' ? 'approved' : 'rejected';
+                
+                return `
+                    <div class="approval-item ${statusClass}">
+                        <div>
+                            <strong>${activity.name}</strong>
+                            <p>Student: ${student ? student.name : 'Unknown'} (${activity.studentId})</p>
+                            <p>Status: ${activity.status.toUpperCase()}</p>
+                            <small>Date: ${new Date(activity.approvedAt || activity.rejectedAt).toLocaleDateString()}</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            approvedRejectedList.innerHTML = itemsHTML;
         }
 
         function loadStudentActivities() {
@@ -1607,6 +2080,7 @@
                 activity.approvedAt = new Date();
                 
                 loadFacultyApprovals();
+                loadFacultyApprovedRejectedActivities();
                 showNotification('Activity approved successfully!', 'success');
                 
                 if (wsConnection) {
@@ -1626,6 +2100,7 @@
                 activity.rejectedAt = new Date();
                 
                 loadFacultyApprovals();
+                loadFacultyApprovedRejectedActivities();
                 showNotification('Activity rejected!', 'error');
                 
                 if (wsConnection) {
@@ -1712,10 +2187,10 @@
 
         function loadInternshipRecommendations() {
             const recommendations = [
-                { title: "Software Development Intern", company: "TechCorp", match: "95%", location: "Bangalore" },
-                { title: "Data Science Intern", company: "DataTech", match: "88%", location: "Hyderabad" },
-                { title: "ML Engineering Intern", company: "AI Solutions", match: "92%", location: "Pune" },
-                { title: "Full Stack Developer Intern", company: "WebTech", match: "90%", location: "Chennai" }
+                { title: "Software Development Intern", company: "TechCorp", match: "95%", location: "Bangalore", lastDate: "2025-10-15", applyLink: "#", learnMoreLink: "#" },
+                { title: "Data Science Intern", company: "DataTech", match: "88%", location: "Hyderabad", lastDate: "2025-10-20", applyLink: "#", learnMoreLink: "#" },
+                { title: "ML Engineering Intern", company: "AI Solutions", match: "92%", location: "Pune", lastDate: "2025-10-25", applyLink: "#", learnMoreLink: "#" },
+                { title: "Full Stack Developer Intern", company: "WebTech", match: "90%", location: "Chennai", lastDate: "2025-10-30", applyLink: "#", learnMoreLink: "#" }
             ];
             const container = document.getElementById('internship-recommendations');
             container.innerHTML = recommendations.map(item => `
@@ -1723,16 +2198,23 @@
                     <strong>${item.title}</strong>
                     <p>${item.company} - ${item.location}</p>
                     <small>Match: ${item.match}</small>
+                    <div class="recommendation-meta">
+                         <span>Last Date: ${item.lastDate}</span>
+                         <div>
+                            <a href="${item.applyLink}" class="btn btn-primary btn-small">Apply Now</a>
+                            <a href="${item.learnMoreLink}" class="btn btn-secondary btn-small">Learn More</a>
+                         </div>
+                    </div>
                 </div>
             `).join('');
         }
 
         function loadScholarshipRecommendations() {
             const recommendations = [
-                { title: "Merit Scholarship for CS Students", provider: "Tech Foundation", amount: "₹50,000" },
-                { title: "Innovation Excellence Award", provider: "Government of India", amount: "₹75,000" },
-                { title: "Women in Tech Scholarship", provider: "WiT Foundation", amount: "₹1,00,000" },
-                { title: "Open Source Contributor Grant", provider: "OSS India", amount: "₹25,000" }
+                { title: "Merit Scholarship for CS Students", provider: "Tech Foundation", amount: "₹50,000", lastDate: "2025-11-01", applyLink: "#", learnMoreLink: "#" },
+                { title: "Innovation Excellence Award", provider: "Government of India", amount: "₹75,000", lastDate: "2025-11-10", applyLink: "#", learnMoreLink: "#" },
+                { title: "Women in Tech Scholarship", provider: "WiT Foundation", amount: "₹1,00,000", lastDate: "2025-11-15", applyLink: "#", learnMoreLink: "#" },
+                { title: "Open Source Contributor Grant", provider: "OSS India", amount: "₹25,000", lastDate: "2025-11-20", applyLink: "#", learnMoreLink: "#" }
             ];
             const container = document.getElementById('scholarship-recommendations');
             container.innerHTML = recommendations.map(item => `
@@ -1740,16 +2222,23 @@
                     <strong>${item.title}</strong>
                     <p>${item.provider}</p>
                     <small>Amount: ${item.amount}</small>
+                    <div class="recommendation-meta">
+                         <span>Last Date: ${item.lastDate}</span>
+                         <div>
+                            <a href="${item.applyLink}" class="btn btn-primary btn-small">Apply Now</a>
+                            <a href="${item.learnMoreLink}" class="btn btn-secondary btn-small">Learn More</a>
+                         </div>
+                    </div>
                 </div>
             `).join('');
         }
 
         function loadJobRecommendations() {
             const recommendations = [
-                { title: "Junior Software Engineer", company: "Infosys", salary: "₹4.5 LPA", experience: "0-1 years" },
-                { title: "Python Developer", company: "Wipro", salary: "₹5.2 LPA", experience: "0-2 years" },
-                { title: "Data Analyst", company: "TCS", salary: "₹4.8 LPA", experience: "0-1 years" },
-                { title: "Frontend Developer", company: "Accenture", salary: "₹5.0 LPA", experience: "0-2 years" }
+                { title: "Junior Software Engineer", company: "Infosys", salary: "₹4.5 LPA", experience: "0-1 years", lastDate: "2025-12-01", applyLink: "#", learnMoreLink: "#" },
+                { title: "Python Developer", company: "Wipro", salary: "₹5.2 LPA", experience: "0-2 years", lastDate: "2025-12-05", applyLink: "#", learnMoreLink: "#" },
+                { title: "Data Analyst", company: "TCS", salary: "₹4.8 LPA", experience: "0-1 years", lastDate: "2025-12-10", applyLink: "#", learnMoreLink: "#" },
+                { title: "Frontend Developer", company: "Accenture", salary: "₹5.0 LPA", experience: "0-2 years", lastDate: "2025-12-15", applyLink: "#", learnMoreLink: "#" }
             ];
             const container = document.getElementById('job-recommendations');
             container.innerHTML = recommendations.map(item => `
@@ -1757,16 +2246,23 @@
                     <strong>${item.title}</strong>
                     <p>${item.company}</p>
                     <small>Salary: ${item.salary} | Experience: ${item.experience}</small>
+                    <div class="recommendation-meta">
+                         <span>Last Date: ${item.lastDate}</span>
+                         <div>
+                            <a href="${item.applyLink}" class="btn btn-primary btn-small">Apply Now</a>
+                            <a href="${item.learnMoreLink}" class="btn btn-secondary btn-small">Learn More</a>
+                         </div>
+                    </div>
                 </div>
             `).join('');
         }
 
         function loadEventRecommendations() {
             const recommendations = [
-                { title: "AI/ML Workshop", date: "Oct 15, 2025", organizer: "IEEE Student Chapter", type: "Workshop" },
-                { title: "Hackathon 2025", date: "Nov 20, 2025", organizer: "CodeChef", type: "Competition" },
-                { title: "Tech Conference", date: "Dec 5, 2025", organizer: "Google Developers", type: "Conference" },
-                { title: "Career Fair", date: "Jan 10, 2026", organizer: "University", type: "Fair" }
+                { title: "AI/ML Workshop", date: "Oct 15, 2025", organizer: "IEEE Student Chapter", type: "Workshop", lastDate: "2025-10-10", applyLink: "#", learnMoreLink: "#" },
+                { title: "Hackathon 2025", date: "Nov 20, 2025", organizer: "CodeChef", type: "Competition", lastDate: "2025-11-18", applyLink: "#", learnMoreLink: "#" },
+                { title: "Tech Conference", date: "Dec 5, 2025", organizer: "Google Developers", type: "Conference", lastDate: "2025-12-01", applyLink: "#", learnMoreLink: "#" },
+                { title: "Career Fair", date: "Jan 10, 2026", organizer: "University", type: "Fair", lastDate: "2026-01-08", applyLink: "#", learnMoreLink: "#" }
             ];
             const container = document.getElementById('event-recommendations');
             container.innerHTML = recommendations.map(item => `
@@ -1774,6 +2270,13 @@
                     <strong>${item.title}</strong>
                     <p>${item.organizer}</p>
                     <small>Date: ${item.date} | Type: ${item.type}</small>
+                    <div class="recommendation-meta">
+                         <span>Last Date: ${item.lastDate}</span>
+                         <div>
+                            <a href="${item.applyLink}" class="btn btn-primary btn-small">Apply Now</a>
+                            <a href="${item.learnMoreLink}" class="btn btn-secondary btn-small">Learn More</a>
+                         </div>
+                    </div>
                 </div>
             `).join('');
         }
@@ -1809,10 +2312,21 @@
             typingDiv.className = 'message bot typing';
             typingDiv.innerHTML = 'Assistant is typing...';
             document.getElementById('chatMessages').appendChild(typingDiv);
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+
 
             getAIResponse(message).then(response => {
-                document.getElementById('chatMessages').removeChild(typingDiv);
+                const chatMessages = document.getElementById('chatMessages');
+                if (chatMessages.lastChild === typingDiv) {
+                    chatMessages.removeChild(typingDiv);
+                }
                 addMessage(response, 'bot');
+            }).catch(() => {
+                const chatMessages = document.getElementById('chatMessages');
+                if (chatMessages.lastChild === typingDiv) {
+                    chatMessages.removeChild(typingDiv);
+                }
+                addMessage('Sorry, I am unable to connect with the AI right now. Please try again later.', 'bot');
             });
         }
 
@@ -1849,7 +2363,7 @@
                 }
             } catch (error) {
                 console.error('Gemini API Error:', error);
-                return 'Sorry, I encountered an error. Please try again.';
+                throw new Error('API request failed');
             }
         }
 
@@ -1867,7 +2381,105 @@
                 sendMessage();
             }
         }
-        
+
+        function handleStudentRegistration(e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById('regStudentId').value;
+            const studentName = document.getElementById('regStudentName').value;
+            const studentEmail = document.getElementById('regStudentEmail').value;
+            const studentBranch = currentUser.department;
+            const studentYear = document.getElementById('regStudentYear').value;
+            const studentCgpa = document.getElementById('regStudentCgpa').value;
+            const studentAttendance = document.getElementById('regStudentAttendance').value;
+            const studentPassword = document.getElementById('regStudentPassword').value;
+
+            if (mockUsers.students.find(s => s.id === studentId)) {
+                showNotification('Student ID already exists!', 'error');
+                return;
+            }
+
+            const newStudent = {
+                id: studentId,
+                name: studentName,
+                email: studentEmail,
+                password: studentPassword,
+                branch: studentBranch,
+                year: studentYear,
+                cgpa: parseFloat(studentCgpa),
+                attendance: parseFloat(studentAttendance),
+                skills: [],
+                interests: [],
+                registeredByFacultyId: currentUser.id
+            };
+            mockUsers.students.push(newStudent);
+            
+            e.target.reset();
+            loadFacultyDashboard();
+            showRegisteredStudents();
+            showNotification('Student registered successfully!', 'success');
+        }
+
+        function showRegisteredStudents() {
+            const registeredList = document.getElementById('registeredStudents');
+            const studentsByMe = mockUsers.students.filter(s => s.registeredByFacultyId === currentUser.id);
+            document.getElementById('registeredStudentCount').textContent = studentsByMe.length;
+
+            if (studentsByMe.length === 0) {
+                registeredList.innerHTML = '<p>No students registered by you yet.</p>';
+                return;
+            }
+
+            const itemsHTML = studentsByMe.map(student => `
+                 <div class="list-item">
+                    <strong>${student.name}</strong> (${student.id})
+                    <br><small>Branch: ${student.branch}, Year: ${student.year}</small>
+                </div>
+            `).join('');
+
+            registeredList.innerHTML = itemsHTML;
+        }
+
+        function searchStudent() {
+            const searchTerm = document.getElementById('studentSearchInput').value.toLowerCase();
+            const searchResultsContainer = document.getElementById('studentSearchItems');
+            
+            if (searchTerm.length < 3) {
+                searchResultsContainer.innerHTML = '<p>Please enter at least 3 characters to search.</p>';
+                return;
+            }
+            
+            const results = mockUsers.students.filter(s => 
+                s.name.toLowerCase().includes(searchTerm) || s.id.toLowerCase() === searchTerm
+            );
+
+            if (results.length === 0) {
+                searchResultsContainer.innerHTML = '<p>No students found matching your search.</p>';
+                return;
+            }
+
+            const resultsHTML = results.map(student => {
+                 const approvedActivities = activities.filter(a => a.studentId === student.id && a.status === 'approved');
+                 return `
+                     <div class="profile-card">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <h3>${student.name}</h3>
+                            <p style="color: #6b7280;">Student</p>
+                        </div>
+                        <div style="display: grid; gap: 1rem;">
+                            <div><strong>Student ID:</strong> ${student.id}</div>
+                            <div><strong>Branch:</strong> ${student.branch || 'N/A'}</div>
+                            <div><strong>Year:</strong> ${student.year || 'N/A'}</div>
+                            <div><strong>CGPA:</strong> ${student.cgpa || 'N/A'}</div>
+                            <div><strong>Approved Activities:</strong> ${approvedActivities.length}</div>
+                        </div>
+                    </div>
+                 `;
+            }).join('');
+            
+            searchResultsContainer.innerHTML = resultsHTML;
+        }
+
         // Utility Functions
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
