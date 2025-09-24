@@ -888,9 +888,10 @@
             <div class="nav-menu-wrapper">
                 <ul class="nav-menu">
                     <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
-                    <li id="dashboard-nav-link" class="hidden-after-logout"><a href="#" class="nav-link" data-section="dashboard">Dashboard</a></li>
-                    <li id="activity-nav-link" class="hidden-after-logout"><a href="#" class="nav-link" data-section="activities">Activities</a></li>
+                    <li id="dashboard-nav-link" class="hidden"><a href="#" class="nav-link" data-section="dashboard">Dashboard</a></li>
+                    <li id="activity-nav-link" class="hidden"><a href="#" class="nav-link" data-section="activities">Activities</a></li>
                     <li id="recommendations-nav-link" class="hidden"><a href="#" class="nav-link" data-section="recommendations">Recommendations</a></li>
+                    <li id="faculty-reg-nav-link" class="hidden"><a href="#" class="nav-link" data-section="faculty-registration">New Faculty</a></li>
                     <li id="student-reg-nav-link" class="hidden"><a href="#" class="nav-link" data-section="student-registration">New Student</a></li>
                     <li id="student-search-nav-link" class="hidden"><a href="#" class="nav-link" data-section="student-search">Student Search</a></li>
                 </ul>
@@ -1080,6 +1081,48 @@
             </div>
         </section>
 
+        <section id="faculty-registration" class="section">
+            <div class="dashboard">
+                <h2 style="color: #1e40af; margin-bottom: 2rem; text-align: center;">New Faculty Registration</h2>
+                <div class="activity-form">
+                    <form id="facultyRegistrationForm">
+                         <div class="form-group">
+                            <label>Faculty ID</label>
+                            <input type="text" id="regFacultyId" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="regFacultyName" required>
+                        </div>
+                         <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="regFacultyEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select id="regFacultyDepartment">
+                                <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                            </select>
+                        </div>
+                         <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" id="regFacultyDesignation" required>
+                        </div>
+                         <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="regFacultyPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Register Faculty</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
         <section id="student-registration" class="section">
             <div class="dashboard">
                 <h2 style="color: #1e40af; margin-bottom: 2rem; text-align: center;">New Student Registration</h2>
@@ -1099,7 +1142,14 @@
                         </div>
                         <div class="form-group">
                             <label>Branch</label>
-                             <input type="text" id="regStudentBranch" disabled>
+                            <select id="regStudentBranch" required>
+                                <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                            </select>
                         </div>
                          <div class="form-group">
                             <label>Year</label>
@@ -1117,12 +1167,14 @@
                             <label>Password</label>
                             <input type="password" id="regStudentPassword" required>
                         </div>
+                        <div class="form-group">
+                            <label>Faculty Supervisor</label>
+                             <select id="regStudentSupervisor" required>
+                                <option value="">Select Supervisor</option>
+                             </select>
+                        </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">Register Student</button>
                     </form>
-                </div>
-                 <div class="list-container" id="registeredStudentsList">
-                    <h3 style="color: #1e40af;">Students Registered by You (<span id="registeredStudentCount">0</span>)</h3>
-                    <div class="list-group" id="registeredStudents"></div>
                 </div>
             </div>
         </section>
@@ -1313,6 +1365,10 @@
                 { id: 'F002', name: 'Dr. B. Tamilselvi', email: 'tamilselvi.b@velhightech.com', password: 'pass123', department: 'Artificial Intelligence & Data Science', designation: 'Professor' },
               { id: 'F003', name: 'Dr. Priya', email: 'priya.rv@velhightech.com', password: 'pass123', department: 'Artificial Intelligence & Data Science', designation: 'Professor' }
             ];
+            
+            mockUsers.admins = [
+                 {id: 'VH001', password: 'pass123', name: 'College Admin', college: 'Vel Tech High Tech'}
+            ];
 
             // Mock Faculty creating student accounts
             mockUsers.students = [
@@ -1375,6 +1431,7 @@
             });
 
             document.getElementById('studentRegistrationForm').addEventListener('submit', handleStudentRegistration);
+            document.getElementById('facultyRegistrationForm').addEventListener('submit', handleFacultyRegistration);
             document.getElementById('studentSearchInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     searchStudent();
@@ -1382,7 +1439,7 @@
             });
             
             if(document.getElementById('regStudentBranch')) {
-                document.getElementById('regStudentBranch').value = 'Artificial Intelligence & Data Science';
+                document.getElementById('regStudentBranch').addEventListener('change', updateFacultySupervisorOptions);
             }
         }
 
@@ -1390,6 +1447,7 @@
             document.getElementById('hero-section').classList.remove('hidden');
             document.getElementById('about-section').classList.remove('hidden');
             document.getElementById('profile-content').classList.add('hidden');
+            document.getElementById('faculty-reg-nav-link').classList.add('hidden');
             document.getElementById('student-reg-nav-link').classList.add('hidden');
             document.getElementById('student-search-nav-link').classList.add('hidden');
             document.getElementById('recommendations-nav-link').classList.add('hidden');
@@ -1472,22 +1530,27 @@
             document.getElementById('about-section').classList.add('hidden');
             document.getElementById('profile-content').classList.remove('hidden');
 
-            document.getElementById('dashboard-nav-link').classList.remove('hidden');
-            document.getElementById('activity-nav-link').classList.remove('hidden');
+            document.getElementById('dashboard-nav-link').classList.add('hidden');
+            document.getElementById('activity-nav-link').classList.add('hidden');
             document.getElementById('student-reg-nav-link').classList.add('hidden');
+            document.getElementById('faculty-reg-nav-link').classList.add('hidden');
             document.getElementById('student-search-nav-link').classList.add('hidden');
             document.getElementById('recommendations-nav-link').classList.add('hidden');
             
             if (userType === 'faculty') {
+                document.getElementById('dashboard-nav-link').classList.remove('hidden');
+                document.getElementById('activity-nav-link').classList.remove('hidden');
                 document.getElementById('student-reg-nav-link').classList.remove('hidden');
             } else if (userType === 'student') {
+                document.getElementById('dashboard-nav-link').classList.remove('hidden');
+                document.getElementById('activity-nav-link').classList.remove('hidden');
                 document.getElementById('student-search-nav-link').classList.remove('hidden');
                 document.getElementById('recommendations-nav-link').classList.remove('hidden');
                 loadRecommendations();
             } else if (userType === 'admin') {
-                document.getElementById('dashboard-nav-link').classList.add('hidden');
-                document.getElementById('activity-nav-link').classList.add('hidden');
-                // Admin dashboard logic here
+                document.getElementById('dashboard-nav-link').classList.remove('hidden');
+                document.getElementById('faculty-reg-nav-link').classList.remove('hidden');
+                document.getElementById('student-reg-nav-link').classList.remove('hidden');
             }
 
             loadProfile();
@@ -1509,12 +1572,14 @@
             document.getElementById(sectionName).classList.add('active');
             const activeLink = document.querySelector(`[data-section="${sectionName}"]`);
             if (activeLink) activeLink.classList.add('active');
-
-            if (sectionName === 'student-registration') {
-                 if(currentUser && userType === 'faculty') {
-                    document.getElementById('regStudentBranch').value = currentUser.department;
-                    showRegisteredStudents();
-                }
+            
+            if (sectionName === 'student-registration' && currentUser && userType === 'faculty') {
+                updateFacultySupervisorOptions();
+                document.getElementById('regStudentBranch').value = currentUser.department;
+                document.getElementById('regStudentBranch').disabled = true;
+            } else if (sectionName === 'student-registration' && currentUser && userType === 'admin') {
+                updateFacultySupervisorOptions();
+                document.getElementById('regStudentBranch').disabled = false;
             }
         }
         
@@ -2388,11 +2453,12 @@
             const studentId = document.getElementById('regStudentId').value;
             const studentName = document.getElementById('regStudentName').value;
             const studentEmail = document.getElementById('regStudentEmail').value;
-            const studentBranch = currentUser.department;
+            const studentBranch = document.getElementById('regStudentBranch').value;
             const studentYear = document.getElementById('regStudentYear').value;
             const studentCgpa = document.getElementById('regStudentCgpa').value;
             const studentAttendance = document.getElementById('regStudentAttendance').value;
             const studentPassword = document.getElementById('regStudentPassword').value;
+            const facultySupervisorId = document.getElementById('regStudentSupervisor').value;
 
             if (mockUsers.students.find(s => s.id === studentId)) {
                 showNotification('Student ID already exists!', 'error');
@@ -2410,35 +2476,61 @@
                 attendance: parseFloat(studentAttendance),
                 skills: [],
                 interests: [],
-                registeredByFacultyId: currentUser.id
+                registeredByFacultyId: facultySupervisorId
             };
             mockUsers.students.push(newStudent);
             
             e.target.reset();
-            loadFacultyDashboard();
-            showRegisteredStudents();
+            loadAdminDashboard();
             showNotification('Student registered successfully!', 'success');
         }
 
-        function showRegisteredStudents() {
-            const registeredList = document.getElementById('registeredStudents');
-            const studentsByMe = mockUsers.students.filter(s => s.registeredByFacultyId === currentUser.id);
-            document.getElementById('registeredStudentCount').textContent = studentsByMe.length;
-
-            if (studentsByMe.length === 0) {
-                registeredList.innerHTML = '<p>No students registered by you yet.</p>';
+        function handleFacultyRegistration(e) {
+             e.preventDefault();
+            
+            const facultyId = document.getElementById('regFacultyId').value;
+            const facultyName = document.getElementById('regFacultyName').value;
+            const facultyEmail = document.getElementById('regFacultyEmail').value;
+            const facultyDepartment = document.getElementById('regFacultyDepartment').value;
+            const facultyDesignation = document.getElementById('regFacultyDesignation').value;
+            const facultyPassword = document.getElementById('regFacultyPassword').value;
+            
+            if (mockUsers.faculty.find(f => f.id === facultyId)) {
+                showNotification('Faculty ID already exists!', 'error');
                 return;
             }
 
-            const itemsHTML = studentsByMe.map(student => `
-                 <div class="list-item">
-                    <strong>${student.name}</strong> (${student.id})
-                    <br><small>Branch: ${student.branch}, Year: ${student.year}</small>
-                </div>
-            `).join('');
-
-            registeredList.innerHTML = itemsHTML;
+            const newFaculty = {
+                id: facultyId,
+                name: facultyName,
+                email: facultyEmail,
+                password: facultyPassword,
+                department: facultyDepartment,
+                designation: facultyDesignation,
+            };
+            mockUsers.faculty.push(newFaculty);
+            facultyList.push(newFaculty);
+            
+            e.target.reset();
+            loadAdminDashboard();
+            showNotification('Faculty registered successfully!', 'success');
         }
+
+        function updateFacultySupervisorOptions() {
+            const supervisorSelect = document.getElementById('regStudentSupervisor');
+            const studentBranch = document.getElementById('regStudentBranch').value;
+            
+            supervisorSelect.innerHTML = '<option value="">Select Supervisor</option>';
+
+            const filteredFaculty = mockUsers.faculty.filter(f => f.department === studentBranch);
+            filteredFaculty.forEach(faculty => {
+                const option = document.createElement('option');
+                option.value = faculty.id;
+                option.textContent = `${faculty.name} (${faculty.id})`;
+                supervisorSelect.appendChild(option);
+            });
+        }
+
 
         function searchStudent() {
             const searchTerm = document.getElementById('studentSearchInput').value.toLowerCase();
